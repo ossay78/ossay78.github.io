@@ -3,35 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
+    <title>Agricultural Vocabulary Quiz</title>
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            overflow: hidden;
+            text-align: center;
+            margin: 20px;
         }
-        h1 {
-            color: #333;
-            position: relative;
-            animation: fadeIn 2s ease-in-out;
+        .question {
+            font-size: 18px;
+            margin-bottom: 10px;
         }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .options {
+            margin-bottom: 20px;
+        }
+        .result {
+            font-size: 20px;
+            font-weight: bold;
+            color: green;
+        }
+        .incorrect {
+            color: red;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to My Website!</h1>
+    <h2>Agricultural Vocabulary Quiz</h2>
+    <div id="quiz"></div>
+    <button onclick="submitQuiz()">Submit</button>
+    <p id="score" class="result"></p>
+    
+    <script>
+        const quizData = [
+            { question: "What is the meaning of '植える (うえる)'?", options: ["To harvest", "To plant", "To weed"], answer: "To plant" },
+            { question: "What is the meaning of '収穫する (しゅうかくする)'?", options: ["To water", "To harvest", "To plow"], answer: "To harvest" },
+            { question: "What is the meaning of '耕す (たがやす)'?", options: ["To plow", "To trim", "To store"], answer: "To plow" },
+            { question: "What is the meaning of '刈る (かる)'?", options: ["To cut", "To plant", "To transport"], answer: "To cut" },
+            { question: "What is the meaning of '撒く (まく)'?", options: ["To sow seeds", "To repair", "To grow"], answer: "To sow seeds" },
+            { question: "What is the meaning of '育てる (そだてる)'?", options: ["To grow/cultivate", "To plow", "To water"], answer: "To grow/cultivate" },
+            { question: "What is the meaning of '水をやる (みずをやる)'?", options: ["To harvest", "To water plants", "To weed"], answer: "To water plants" },
+            { question: "What is the meaning of '肥料を与える (ひりょうをあたえる)'?", options: ["To apply fertilizer", "To cut crops", "To plant"], answer: "To apply fertilizer" },
+            { question: "What is the meaning of '雑草を取る (ざっそうをとる)'?", options: ["To remove weeds", "To sow seeds", "To harvest"], answer: "To remove weeds" },
+            { question: "What is the meaning of '剪定する (せんていする)'?", options: ["To prune", "To harvest", "To store crops"], answer: "To prune" },
+            { question: "What is the meaning of '運ぶ (はこぶ)'?", options: ["To transport", "To water", "To plow"], answer: "To transport" },
+            { question: "What is the meaning of '積む (つむ)'?", options: ["To load", "To water", "To grow plants"], answer: "To load" }
+        ];
+        
+        function loadQuiz() {
+            const quizContainer = document.getElementById("quiz");
+            quizData.forEach((item, index) => {
+                const questionDiv = document.createElement("div");
+                questionDiv.classList.add("question");
+                questionDiv.innerHTML = `<p>${index + 1}. ${item.question}</p>`;
+                
+                const optionsDiv = document.createElement("div");
+                optionsDiv.classList.add("options");
+                optionsDiv.setAttribute("id", `options${index}`);
+                
+                item.options.forEach(option => {
+                    const label = document.createElement("label");
+                    label.innerHTML = `<input type="radio" name="q${index}" value="${option}"> ${option}<br>`;
+                    optionsDiv.appendChild(label);
+                });
+                
+                quizContainer.appendChild(questionDiv);
+                quizContainer.appendChild(optionsDiv);
+            });
+        }
+        
+        function submitQuiz() {
+            let score = 0;
+            quizData.forEach((item, index) => {
+                const selectedOption = document.querySelector(`input[name='q${index}']:checked`);
+                const optionsDiv = document.getElementById(`options${index}`);
+                
+                if (selectedOption) {
+                    if (selectedOption.value === item.answer) {
+                        score++;
+                    } else {
+                        const correctAnswer = document.createElement("p");
+                        correctAnswer.classList.add("incorrect");
+                        correctAnswer.innerText = `Correct answer: ${item.answer}`;
+                        optionsDiv.appendChild(correctAnswer);
+                    }
+                } else {
+                    const warning = document.createElement("p");
+                    warning.classList.add("incorrect");
+                    warning.innerText = "Please select an answer!";
+                    optionsDiv.appendChild(warning);
+                }
+            });
+            document.getElementById("score").innerText = `Your Score: ${score} / ${quizData.length}`;
+        }
+        
+        loadQuiz();
+    </script>
 </body>
 </html>
